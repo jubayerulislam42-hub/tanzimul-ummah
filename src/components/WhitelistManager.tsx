@@ -1,0 +1,106 @@
+"use client";
+
+import { useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+
+export default function WhitelistManager() {
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("principal");
+  const [branchCode, setBranchCode] = useState("");
+  const [rows, setRows] = useState<any[]>([]);
+  const [msg, setMsg] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const load = async () => {
+    const supabase = createClient();
+    const { data } = await supabase.from("admin_whitelist").select("*").order("email");
+    setRows((data as any[]) ?? []);
+  };
+
+  const add = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setBusy(true);
+    setMsg("");
+    const supabase = createClient();
+    let branchId: string | null = null;
+    if (branchCode) {
+      const { data: b } = await supabase
+        .from("branches")
+        .select("id")
+        .eq("code", branchCode)
+        .single();
+      branchId = b?.id ?? null;
+    }
+    const { error } = await supabase
+      .from("admin_whitelist")
+      .upsert({ email: email.toLowerCase(), role, branch_id: branchId }, { onConflict: "email" });
+    setBusy(false);
+    if (error) setMsg("ত্রুটি: " + error.message);
+    else {
+      setEmail("");
+      setBranchCode("");
+      setMsg("যোগ করা হয়েছে ✓");
+      await load();
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <form onSubmit={add} className="space-y-3">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          placeholder="ইমেইল (যেমন: a@b.com)"
+          className="w-full rounded-xl border border-primary/15 bg-white px-4 py-3 text-sm text-charcoal outline-none focus:border-accent-gold"
+        />
+        <div className="flex gap-3">
+          <select
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            className="flex-1 rounded-xl border border-primary/15 bg-white px-4 py-3 text-sm text-charcoal outline-none focus:border-accent-gold"
+          >
+            <option value="principal">প্রিন্সিপাল (শাখা-স্কোপ)</option>
+            <option value="regional_supervisor">সুপারভাইজার (বিভাগ-স্কোপ)</option>
+            <option value="super_admin">সুপার অ্যাডমিন (সব)</option>
+          </select>
+          <input
+            value={branchCode}
+            onChange={(e) => setBranchCode(e.target.value)}
+            placeholder="শাখা কোড (ঐচ্ছিক)"
+            className="flex-1 rounded-xl border border-primary/15 bg-white px-4 py-3 text-sm text-charcoal outline-none focus:border-accent-gold"
+          />
+        </div>
+        <button
+          type="submit"
+          disabled={busy}
+          className="w-full rounded-full bg-accent-gold px-6 py-3 font-semibold text-primary shadow-gold transition hover:brightness-110 disabled:opacity-60"
+        >
+          {busy ? "যোগ হচ্ছে..." : "অ্যাড করুন"}
+        </button>
+      </form>
+      {msg && <p className={`text-sm ${msg.includes("ত্রুটি") ? "text-red-600" : "text-green-700"}`}>{msg}</p>}
+
+      <div className="pt-2">
+        <button onClick={load} className="text-sm text-accent-gold underline">
+          তালিকা রিফ্রেশ করুন
+        </button>
+        {rows.length > 0 && (
+          <table className="mt-3 w-full text-left text-sm">
+            <thead className="text-charcoal/60"><tr><th className="py-2">ইমেইল</th><th>রোল</th><th>শাখা</th></tr></thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.id} className="border-t border-primary/5">
+                  <td className="py-2 text-charcoal">{r.email}</td>
+                  <td className="text-charcoal/70">{r.role}</td>
+                  <td className="text-charcoal/50">{r.branch_id ? "✓" : "—"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  );
+}
