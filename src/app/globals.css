@@ -3,21 +3,49 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #faf8f3;
+  --foreground: #2d2d2d;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Islamic geometric pattern overlay (subtle, dark sections) */
+.islamic-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23D4A537' stroke-opacity='0.06' stroke-width='1'%3E%3Cpath d='M20 0L40 20L20 40L0 20Z'/%3E%3Ccircle cx='20' cy='20' r='6'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* gold gradient text */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #e6c067 0%, #d4a537 50%, #b8872a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* premium card */
+.card-premium {
+  background: #ffffff;
+  border: 1px solid rgba(15, 107, 60, 0.08);
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 24px -6px rgba(10, 31, 22, 0.18);
+}
+
+/* focus accessibility */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #d4a537;
+  outline-offset: 2px;
 }
 
 @layer utilities {
