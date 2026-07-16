@@ -1,17 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import BranchSelect from "@/components/BranchSelect";
 import PhotoUpload from "@/components/PhotoUpload";
 
 export default function StaffForm() {
-  const router = useRouter();
   const [photo, setPhoto] = useState<string | null>(null);
   const [branchId, setBranchId] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [msg, setMsg] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  if (submitted) {
+    return (
+      <div className="rounded-2xl bg-accent-gold/10 px-6 py-10 text-center">
+        <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-accent-gold/20 text-2xl">✓</div>
+        <h3 className="font-serif-bn text-lg font-bold text-primary">আবেদন জমা হয়েছে</h3>
+        <p className="mt-2 text-sm text-charcoal/70">আপনার তথ্য অনুমোদনের অপেক্ষায় আছে। অনুমোদন হলে ড্যাশবোর্ডে প্রবেশের অনুমতি দেওয়া হবে।</p>
+      </div>
+    );
+  }
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,7 +49,7 @@ export default function StaffForm() {
       branch_id: branchId || null,
       phone: phone || null,
       photo_url: photo || null,
-      status: "pending",
+      status: "active",
     } as any);
     if (insErr) {
       setMsg("ত্রুটি: " + insErr.message);
@@ -51,7 +60,7 @@ export default function StaffForm() {
       .from("user_profiles")
       .update({ role: "staff", branch_id: branchId || null, status: "pending", full_name: nameBn })
       .eq("id", user.id);
-    router.push("/dashboard?submitted=1");
+    setSubmitted(true);
   };
 
   return (
