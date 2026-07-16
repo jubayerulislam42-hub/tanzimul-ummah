@@ -361,3 +361,13 @@ Both breakpoints must be individually beautiful, not one squished into the other
 
 ## 8. Progress log
 - 2026-07-15: Planning. Read all old-build files, analyzed theme from 2 screenshots, locked theme + schema-fix strategy. Nothing built yet (awaiting user "start building").
+- 2026-07-16: "Start" → Phase 1 begun. Scaffold (Next 14.2.33 + TS + Tailwind), deps installed. **Termux SWC fix applied** (see Appendix A). Dev server returns HTTP 200.
+
+## Appendix A — Termux / Android ARM64 build notes (recovery)
+Next.js has no prebuilt native SWC binary for `android-arm64`, so `npm run dev`/`build` crashes with "Failed to load SWC binary". Recovery if node_modules is wiped/reinstalled:
+1. Pin `next@14.2.33` and install matching wasm: `npm i next@14.2.33 @next/swc-wasm-nodejs@14.2.33`.
+2. `next.config.mjs` must include `experimental: { useWasmBinary: true }`.
+3. Patch `node_modules/next/dist/build/swc/index.js` line 224: change `async function loadBindings(useWasmBinary = false)` → `= true`. (Forces wasm fallback-first on android.)
+4. Do NOT add `.babelrc` (Next 14.2.33 has a bug: Babel mode crashes `getBabelLoader` with ERR_INVALID_ARG_TYPE).
+5. `dev.sh` kills stale next procs + forces PORT=3000 to avoid the "port in use" false-500.
+After recovery: `sh dev.sh` (background) → health-check `curl -s -o ~/home.html http://localhost:3000` → expect HTTP 200.
