@@ -23,15 +23,15 @@ const tilesByRole: Record<string, { icon: any; label: string; href: string }[]> 
   principal: [
     { icon: Building2, label: "শাখা ওভারভিউ", href: "#" },
     { icon: Users, label: "শিক্ষক-কর্মচারী", href: "#" },
-    { icon: Bell, label: "নোটিশ", href: "/notices" },
+    { icon: ShieldCheck, label: "অনুমোদন", href: "/dashboard/approvals" },
   ],
   regional_supervisor: [
     { icon: Building2, label: "আঞ্চলিক শাখাসমূহ", href: "/branches" },
     { icon: Users, label: "প্রতিবেদন", href: "#" },
-    { icon: ShieldCheck, label: "অনুমোদন", href: "#" },
+    { icon: ShieldCheck, label: "অনুমোদন", href: "/dashboard/approvals" },
   ],
   super_admin: [
-    { icon: ShieldCheck, label: "অ্যাডমিন প্যানেল", href: "#" },
+    { icon: ShieldCheck, label: "অনুমোদন", href: "/dashboard/approvals" },
     { icon: Building2, label: "সব শাখা", href: "/branches" },
     { icon: Users, label: "ব্যবহারকারী ব্যবস্থাপনা", href: "#" },
   ],
@@ -52,6 +52,11 @@ export default async function DashboardPage() {
       .eq("id", user.id)
       .single();
     finalProfile = (data as any) ?? null;
+  }
+
+  // New users with no role/branch yet -> onboarding
+  if (finalProfile && (!finalProfile.role || !finalProfile.branch_id)) {
+    redirect("/onboarding");
   }
 
   const tiles = tilesByRole[finalProfile?.role ?? "student"] ?? tilesByRole.student;
