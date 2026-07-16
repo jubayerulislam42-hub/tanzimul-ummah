@@ -1,5 +1,6 @@
 import Link from "next/link";
 import MosqueSilhouette from "./MosqueSilhouette";
+import Logo from "./Logo";
 import { MapPin, Phone, Mail } from "lucide-react";
 
 export default function Footer() {
@@ -9,7 +10,7 @@ export default function Footer() {
       <div className="mx-auto grid max-w-7xl gap-8 px-4 pb-10 pt-6 sm:grid-cols-2 md:grid-cols-3">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-2xl">🕌</span>
+            <Logo size={44} />
             <h3 className="font-serif-bn text-lg font-bold">তানযীমুল উম্মাহ হিফয মাদরাসা</h3>
           </div>
           <p className="mt-3 text-sm leading-relaxed text-cream/70">

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Menu, X, LogIn } from "lucide-react";
+import Logo from "./Logo";
 
 const navLinks = [
   { href: "/", label: "হোম" },
@@ -20,9 +21,7 @@ export default function Navbar() {
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
         {/* Brand */}
         <Link href="/" className="flex items-center gap-2">
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent-gold/15 text-xl">
-            🕌
-          </span>
+          <Logo size={40} className="ring-1 ring-accent-gold/30" />
           <span className="font-serif-bn text-base font-bold leading-tight text-cream sm:text-lg">
             তানযীমুল উম্মাহ
             <span className="block text-[10px] font-normal text-accent-gold sm:text-xs">

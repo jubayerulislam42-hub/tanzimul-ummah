@@ -1,5 +1,6 @@
 import AuthButton from "@/components/AuthButton";
 import SectionDivider from "@/components/SectionDivider";
+import Logo from "@/components/Logo";
 
 export const metadata = { title: "লগইন — তানযীমুল উম্মাহ" };
 
@@ -11,8 +12,8 @@ export default function LoginPage({
   return (
     <main className="flex min-h-screen items-center justify-center bg-primary px-4 py-16 islamic-pattern">
       <div className="w-full max-w-md rounded-3xl border border-accent-gold/20 bg-primary-light p-8 text-center shadow-2xl">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent-gold/15 text-3xl">
-          🕌
+        <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-accent-gold/10 ring-1 ring-accent-gold/25">
+          <Logo size={64} />
         </div>
         <h1 className="font-serif-bn text-2xl font-bold text-cream">
           তানযীমুল উম্মাহ হিফয মাদরাসা
