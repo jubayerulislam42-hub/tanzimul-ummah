@@ -1,4 +1,5 @@
 import { Building2, MapPin } from "lucide-react";
+import Link from "next/link";
 
 export interface Branch {
   id: string;
@@ -13,7 +14,10 @@ export interface Branch {
 
 export default function BranchCard({ branch }: { branch: Branch }) {
   return (
-    <div className="group flex flex-col rounded-2xl border border-primary/10 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-accent-gold hover:shadow-lg">
+    <Link
+      href={`/branches/${encodeURIComponent(branch.code)}`}
+      className="group flex flex-col rounded-2xl border border-primary/10 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-accent-gold hover:shadow-lg"
+    >
       <div className="mb-3 flex items-start justify-between gap-3">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/5 text-primary transition group-hover:bg-accent-gold/15">
           <Building2 size={20} />
@@ -36,6 +40,6 @@ export default function BranchCard({ branch }: { branch: Branch }) {
           {[branch.district, branch.division].filter(Boolean).join(", ") || "—"}
         </span>
       </div>
-    </div>
+    </Link>
   );
 }
