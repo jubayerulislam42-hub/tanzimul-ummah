@@ -21,16 +21,19 @@ const tilesByRole: Record<string, { icon: any; label: string; href: string }[]> 
     { icon: CalendarDays, label: "হাজিরা", href: "#" },
   ],
   principal: [
+    { icon: ShieldCheck, label: "অ্যাডমিন প্যানেল", href: "/dashboard/admin" },
     { icon: Building2, label: "শাখা ওভারভিউ", href: "#" },
     { icon: Users, label: "শিক্ষক-কর্মচারী", href: "#" },
     { icon: ShieldCheck, label: "অনুমোদন", href: "/dashboard/approvals" },
   ],
   regional_supervisor: [
+    { icon: ShieldCheck, label: "অ্যাডমিন প্যানেল", href: "/dashboard/admin" },
     { icon: Building2, label: "আঞ্চলিক শাখাসমূহ", href: "/branches" },
     { icon: Users, label: "প্রতিবেদন", href: "#" },
     { icon: ShieldCheck, label: "অনুমোদন", href: "/dashboard/approvals" },
   ],
   super_admin: [
+    { icon: ShieldCheck, label: "অ্যাডমিন প্যানেল", href: "/dashboard/admin" },
     { icon: ShieldCheck, label: "অনুমোদন", href: "/dashboard/approvals" },
     { icon: Building2, label: "সব শাখা", href: "/branches" },
     { icon: Users, label: "ব্যবহারকারী ব্যবস্থাপনা", href: "#" },
@@ -54,12 +57,15 @@ export default async function DashboardPage() {
     finalProfile = (data as any) ?? null;
   }
 
-  // New users with no role/branch yet -> onboarding
-  if (finalProfile && (!finalProfile.role || !finalProfile.branch_id)) {
-    redirect("/onboarding");
+  const role = finalProfile?.role ?? "student";
+  const isAdmin = role === "principal" || role === "regional_supervisor" || role === "super_admin";
+
+  // New users: admins pick branch via /onboarding/admin; others via /onboarding role select
+  if (finalProfile && (!role || !finalProfile.branch_id)) {
+    redirect(isAdmin ? "/onboarding/admin" : "/onboarding");
   }
 
-  const tiles = tilesByRole[finalProfile?.role ?? "student"] ?? tilesByRole.student;
+  const tiles = tilesByRole[role] ?? tilesByRole.student;
 
   return (
     <DashboardLayout profile={finalProfile}>

@@ -2,18 +2,23 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import BranchSelect from "@/components/BranchSelect";
 
 export default function WhitelistManager() {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [role, setRole] = useState("principal");
-  const [branchCode, setBranchCode] = useState("");
+  const [branchId, setBranchId] = useState("");
   const [rows, setRows] = useState<any[]>([]);
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
 
   const load = async () => {
     const supabase = createClient();
-    const { data } = await supabase.from("admin_whitelist").select("*").order("email");
+    const { data } = await supabase
+      .from("admin_whitelist")
+      .select("id, email, role, branch_id")
+      .order("email");
     setRows((data as any[]) ?? []);
   };
 
@@ -22,27 +27,24 @@ export default function WhitelistManager() {
     setBusy(true);
     setMsg("");
     const supabase = createClient();
-    let branchId: string | null = null;
-    if (branchCode) {
-      const { data: b } = await supabase
-        .from("branches")
-        .select("id")
-        .eq("code", branchCode)
-        .single();
-      branchId = b?.id ?? null;
-    }
     const { error } = await supabase
       .from("admin_whitelist")
-      .upsert({ email: email.toLowerCase(), role, branch_id: branchId }, { onConflict: "email" });
+      .upsert(
+        { email: email.toLowerCase(), full_name: name || null, role, branch_id: branchId || null },
+        { onConflict: "email" }
+      );
     setBusy(false);
     if (error) setMsg("ত্রুটি: " + error.message);
     else {
       setEmail("");
-      setBranchCode("");
+      setName("");
+      setBranchId("");
       setMsg("যোগ করা হয়েছে ✓");
       await load();
     }
   };
+
+  const needsBranch = role === "principal" || role === "regional_supervisor";
 
   return (
     <div className="space-y-4">
@@ -55,7 +57,14 @@ export default function WhitelistManager() {
           placeholder="ইমেইল (যেমন: a@b.com)"
           className="w-full rounded-xl border border-primary/15 bg-white px-4 py-3 text-sm text-charcoal outline-none focus:border-accent-gold"
         />
-        <div className="flex gap-3">
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          placeholder="নাম"
+          className="w-full rounded-xl border border-primary/15 bg-white px-4 py-3 text-sm text-charcoal outline-none focus:border-accent-gold"
+        />
+        <div className="flex flex-col gap-3 sm:flex-row">
           <select
             value={role}
             onChange={(e) => setRole(e.target.value)}
@@ -65,12 +74,15 @@ export default function WhitelistManager() {
             <option value="regional_supervisor">সুপারভাইজার (বিভাগ-স্কোপ)</option>
             <option value="super_admin">সুপার অ্যাডমিন (সব)</option>
           </select>
-          <input
-            value={branchCode}
-            onChange={(e) => setBranchCode(e.target.value)}
-            placeholder="শাখা কোড (ঐচ্ছিক)"
-            className="flex-1 rounded-xl border border-primary/15 bg-white px-4 py-3 text-sm text-charcoal outline-none focus:border-accent-gold"
-          />
+          {needsBranch ? (
+            <div className="flex-1">
+              <BranchSelect value={branchId} onChange={setBranchId} />
+            </div>
+          ) : (
+            <div className="flex-1 rounded-xl border border-dashed border-primary/15 px-4 py-3 text-sm text-charcoal/40">
+              সুপার অ্যাডমিন: শাখা লাগে না
+            </div>
+          )}
         </div>
         <button
           type="submit"
