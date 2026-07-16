@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSessionProfile } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
 import DashboardLayout from "./layout";
 import { GraduationCap, Users, BookOpenText, Bell, Building2, ShieldCheck, CalendarDays } from "lucide-react";
 
@@ -40,10 +41,23 @@ export default async function DashboardPage() {
   const { user, profile } = await getSessionProfile();
   if (!user) redirect("/login");
 
-  const tiles = tilesByRole[profile?.role ?? "student"] ?? tilesByRole.student;
+  // Safety net: ensure a profile row exists (handles sessions created before provisioning ran)
+  let finalProfile = profile;
+  if (!finalProfile) {
+    const supabase = createClient();
+    await supabase.rpc("provision_user_on_login");
+    const { data } = await supabase
+      .from("user_profiles")
+      .select("id, email, full_name, photo_url, role, branch_id, status")
+      .eq("id", user.id)
+      .single();
+    finalProfile = (data as any) ?? null;
+  }
+
+  const tiles = tilesByRole[finalProfile?.role ?? "student"] ?? tilesByRole.student;
 
   return (
-    <DashboardLayout profile={profile!}>
+    <DashboardLayout profile={finalProfile}>
       <h2 className="mb-4 font-serif-bn text-lg font-bold text-primary">দ্রুত কাজ</h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {tiles.map((t) => (

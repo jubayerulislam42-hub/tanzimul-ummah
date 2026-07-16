@@ -17,9 +17,17 @@ export default function DashboardLayout({
   profile,
   children,
 }: {
-  profile: Profile;
+  profile: Profile | null;
   children: ReactNode;
 }) {
+  const roleLabel =
+    profile?.role &&
+    roleLabels[profile.role]
+      ? roleLabels[profile.role]
+      : (profile?.role ?? "ব্যবহারকারী");
+  const displayName = profile?.full_name || profile?.email || "ব্যবহারকারী";
+  const displayEmail = profile?.email || "";
+
   return (
     <>
       <Navbar />
@@ -28,13 +36,11 @@ export default function DashboardLayout({
           {/* Header card */}
           <div className="mb-8 flex flex-col items-start justify-between gap-4 rounded-3xl border border-primary/10 bg-primary p-6 text-cream sm:flex-row sm:items-center">
             <div>
-              <p className="text-xs text-accent-gold">
-                {roleLabels[profile.role] ?? profile.role}
-              </p>
-              <h1 className="font-serif-bn text-xl font-bold">
-                {profile.full_name || profile.email}
-              </h1>
-              <p className="mt-1 text-sm text-cream/60">{profile.email}</p>
+              <p className="text-xs text-accent-gold">{roleLabel}</p>
+              <h1 className="font-serif-bn text-xl font-bold">{displayName}</h1>
+              {displayEmail && (
+                <p className="mt-1 text-sm text-cream/60">{displayEmail}</p>
+              )}
             </div>
             <SignOutButton />
           </div>
