@@ -1,0 +1,24 @@
+INSERT INTO branches (code, name_bn, name_en, type, division, district, address, phone, email, established_date, status)
+VALUES
+  ('101', 'তানযীমুল উম্মাহ আলিম মাদরাসা, উত্তরা, ঢাকা', 'Tanzimul Ummah Alim Madrasah', 'Alim Madrasah'::branch_type, 'Dhaka', 'Dhaka', 'Uttara (উত্তরা), —', null, null, null, 'active'::record_status),
+  ('102', 'তানযীমুল উম্মাহ হিফয মাদরাসা, উত্তরা, ঢাকা', 'Tanzimul Ummah Hifz Madrasah', 'Hifz Madrasah'::branch_type, 'Dhaka', 'Dhaka', 'Uttara (উত্তরা), —', null, null, null, 'active'::record_status),
+  ('103', 'তানযীমুল উম্মাহ গার্লস মাদরাসা, উত্তরা', 'Tanzimul Ummah Girls'' Madrasah', 'Girls Madrasah'::branch_type, 'Dhaka', 'Dhaka', 'Uttara (উত্তরা), —', null, null, null, 'active'::record_status),
+  ('104', 'তানযীমুল উম্মাহ হিফয মাদরাসা, আল আরক্বাম শাখা', 'Tanzimul Ummah Hifz Madrasah, Al-Arqam Branch', 'Hifz Madrasah'::branch_type, 'Dhaka', 'Dhaka', 'Uttara (উত্তরা), —', null, null, null, 'active'::record_status),
+  ('105', 'তানযীমুল উম্মাহ আলিম মাদরাসা, ইবতেদায়ি শাখা', 'Tanzimul Ummah Alim Madrasah, Ibtidayee Branch', 'Alim Madrasah'::branch_type, 'Dhaka', 'Dhaka', 'Uttara (উত্তরা), —', null, null, null, 'active'::record_status),
+  ('106', 'তানযীমুল উম্মাহ গার্লস হিফয মাদরাসা, উত্তরা', 'Tanzimul Ummah Girls'' Hifz Madrasah', 'Girls Madrasah'::branch_type, 'Dhaka', 'Dhaka', 'Uttara (উত্তরা), —', null, null, null, 'active'::record_status),
+  ('108', 'তানযীমুল উম্মাহ মাদরাসা, চট্টগ্রাম শাখা', 'Tanzimul Ummah Madrasah, Chittagong Branch', 'Alim Madrasah'::branch_type, 'Chattogram', 'Chattogram', '(), —', null, null, null, 'active'::record_status),
+  ('109A', 'তানযীমুল উম্মাহ হিফয মাদরাসা, চিটাগাংরোড শাখা', 'Tanzimul Ummah Madrasah, Chittagong Road Branch', 'Hifz Madrasah'::branch_type, 'Dhaka', 'Dhaka', '(), —', null, null, null, 'active'::record_status),
+  ('109B', 'তানযীমুল উম্মাহ হিফয মাদরাসা, চিটাগাংরোড শাখা [গার্লস সেকশান]', 'Tanzimul Ummah Madrasah, Chittagong Road Branch (Girls'' Section)', 'Hifz Madrasah'::branch_type, 'Dhaka', 'Narayanganj', '(), —', null, null, null, 'active'::record_status),
+  ('110', 'তানযীমুল উম্মাহ মাদরাসা, ফেনী শাখা', 'Tanzimul Ummah Madrasah, Feni Branch', 'Alim Madrasah'::branch_type, 'Chattogram', 'Feni', '(), —', null, null, null, 'active'::record_status),
+  ('111', 'তানযীমুল উম্মাহ হিফয মাদরাসা, টাঙ্গাইল শাখা', 'Tanzimul Ummah Hifz Madrasah, Tangail Branch', 'Hifz Madrasah'::branch_type, 'Dhaka', 'Tangail', 'Shalla, Kodalia (কোদালিয়া), —', null, null, null, 'active'::record_status),
+  ('112', 'তানযীমুল উম্মাহ হিফয মাদরাসা, দক্ষিণখান শাখা', 'Tanzimul Ummah Hifz Madrasah, Dakkinkhan Branch', 'Hifz Madrasah'::branch_type, 'Dhaka', 'Dhaka', 'Uttara (উত্তরা), —', null, null, null, 'active'::record_status),
+  ('113A', 'তানযীমুল উম্মাহ হিফয মাদরাসা, চট্টগ্রাম শাখা-০১', 'Tanzimul Ummah Hifz Madrasah, Chittagong Branch - 1', 'Hifz Madrasah'::branch_type, 'Chattogram', 'Chattogram', '(), —', null, null, null, 'active'::record_status),
+  ('113B', 'তানযীমুল উম্মাহ হিফয মাদরাসা, চট্টগ্রাম শাখা-০২', 'Tanzimul Ummah Hifz Madrasah, Chittagong Branch - 2', 'Hifz Madrasah'::branch_type, 'Chattogram', 'Chattogram', '(), —', null, null, null, 'active'::record_status),
+  ('116', 'তানযীমুল উম্মাহ হিফয মাদরাসা, আল-আতফাল শাখা', 'Tanzimul Ummah Hifz Madrasah, Al-Atfal branch', 'Hifz Madrasah'::branch_type, 'Dhaka', 'Dhaka', 'Uttara (উত্তরা), —', null, null, null, 'active'::record_status),
+  ('117', 'তানযীমুল উম্মাহ হিফয মাদরাসা, নারায়ণগঞ্জ শাখা', 'Tanzimul Ummah Hifz Madrasah, Narayanganj Branch', 'Hifz Madrasah'::branch_type, 'Dhaka', 'Narayanganj', '(), —', null, null, null, 'active'::record_status),
+  ('118', 'তানযীমুল উম্মাহ হিফয মাদরাসা, ফেনী শাখা', 'Tanzimul Ummah Hifz Madrasah, Feni Branch', 'Hifz Madrasah'::branch_type, 'Chattogram', 'Feni', '(), —', null, null, null, 'active'::record_status),
+  ('119', 'তানযীমুল উম্মাহ প্রি-হিফয মাদরাসা', 'Tanzimul Ummah Pre-Hifz Madrasah', 'Pre-Hifz Madrasah'::branch_type, 'Dhaka', 'Dhaka', 'Uttara (উত্তরা), —', null, null, null, 'active'::record_status),
+  ('132', 'তানযীমুল উম্মাহ গার্লস মাদরাসা, নারায়ণগঞ্জ শাখা', 'Tanzimul Ummah Girls'' Madrasah, Narayanganj Branch', 'Girls Madrasah'::branch_type, 'Dhaka', 'Narayanganj', '(), —', null, null, null, 'active'::record_status),
+  ('133', 'তানযীমুল উম্মাহ হিফয মাদরাসা, স্থায়ী ক্যাম্পাস, আশুলিয়া', 'Tanzimul Ummah Hifz Madrasah, Permanent Campus, Ashulia', 'Hifz Madrasah'::branch_type, 'Dhaka', 'Dhaka', 'Bagherpara, Ashulia (আশুলিয়া), —', null, null, null, 'active'::record_status),
+  ('134', 'তানযীমুল উম্মাহ হিফয মাদরাসা, গাজীপুর শাখা', 'Tanzimul Ummah Hifz Madrasah, Gazipur Branch', 'Hifz Madrasah'::branch_type, 'Dhaka', 'Gazipur', '(), —', null, null, null, 'active'::record_status)
+ON CONFLICT (code) DO UPDATE SET name_bn=EXCLUDED.name_bn, name_en=EXCLUDED.name_en, type=EXCLUDED.type, division=EXCLUDED.division, district=EXCLUDED.district, address=EXCLUDED.address, phone=EXCLUDED.phone, email=EXCLUDED.email, status=EXCLUDED.status;
