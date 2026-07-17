@@ -15,7 +15,19 @@ async function getBranch(code: string) {
     .select("id, code, name_bn, name_en, type, division, district, address, phone, email, established_date, status")
     .eq("code", decodeURIComponent(code))
     .single();
-  return data;
+  if (!data) return null;
+  // Aggregate counts only (no individual student rows — privacy rule).
+  const [{ count: students }, { count: teachers }, { count: staff }] = await Promise.all([
+    supabase.from("students").select("id", { count: "exact", head: true }).eq("branch_id", (data as any).id),
+    supabase.from("teachers").select("id", { count: "exact", head: true }).eq("branch_id", (data as any).id),
+    supabase.from("staff").select("id", { count: "exact", head: true }).eq("branch_id", (data as any).id),
+  ]);
+  return {
+    ...(data as any),
+    students: students ?? 0,
+    teachers: teachers ?? 0,
+    staff: staff ?? 0,
+  };
 }
 
 export async function generateMetadata({ params }: { params: { code: string } }) {
@@ -34,6 +46,12 @@ export default async function BranchDetail({ params }: { params: { code: string 
     { icon: MapPin, label: "বিভাগ", value: branch.division || "—" },
     { icon: Phone, label: "ফোন", value: branch.phone || "—" },
     { icon: Mail, label: "ইমেইল", value: branch.email || "—" },
+  ];
+
+  const stats = [
+    { icon: GraduationCap, label: "শিক্ষার্থী", value: branch.students },
+    { icon: Users, label: "শিক্ষক", value: branch.teachers },
+    { icon: Users, label: "স্টাফ", value: branch.staff },
   ];
 
   return (
@@ -96,18 +114,15 @@ export default async function BranchDetail({ params }: { params: { code: string 
             </div>
           )}
 
-          {/* Public stats placeholder — aggregate only, per privacy rules */}
-          <div className="mt-6 grid grid-cols-2 gap-4">
-            <div className="rounded-2xl border border-primary/10 bg-white p-5 text-center shadow-sm">
-              <GraduationCap className="mx-auto mb-1 text-accent-gold" size={22} />
-              <div className="text-xs text-charcoal/50">শিক্ষার্থী</div>
-              <div className="font-serif-bn text-lg font-bold text-primary">—</div>
-            </div>
-            <div className="rounded-2xl border border-primary/10 bg-white p-5 text-center shadow-sm">
-              <Users className="mx-auto mb-1 text-accent-gold" size={22} />
-              <div className="text-xs text-charcoal/50">শিক্ষক</div>
-              <div className="font-serif-bn text-lg font-bold text-primary">—</div>
-            </div>
+          {/* Public aggregate stats (counts only, per privacy rules) */}
+          <div className="mt-6 grid grid-cols-3 gap-4">
+            {stats.map((s) => (
+              <div key={s.label} className="rounded-2xl border border-primary/10 bg-white p-5 text-center shadow-sm">
+                <s.icon className="mx-auto mb-1 text-accent-gold" size={22} />
+                <div className="text-xs text-charcoal/50">{s.label}</div>
+                <div className="font-serif-bn text-lg font-bold text-primary">{s.value}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -116,3 +131,4 @@ export default async function BranchDetail({ params }: { params: { code: string 
     </>
   );
 }
+

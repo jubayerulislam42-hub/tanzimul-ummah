@@ -57,6 +57,57 @@ export async function getMyStudentRecord(userId: string): Promise<StudentRecord 
   };
 }
 
+export interface StaffRecord {
+  id: string;
+  employee_id: string | null;
+  name_bn: string | null;
+  name_en: string | null;
+  designation: string | null;
+  branch_id: string | null;
+  qualification: string | null;
+  phone: string | null;
+  photo_url: string | null;
+  status: string | null;
+  branch_name: string | null;
+  branch_code: string | null;
+  branch_district: string | null;
+}
+
+/** Returns the logged-in teacher/staff record (with branch info) or null. Server-only. */
+export async function getMyStaffRecord(
+  userId: string,
+  table: "teachers" | "staff"
+): Promise<StaffRecord | null> {
+  const supabase = createClient();
+  const selectCols =
+    table === "teachers"
+      ? "id, employee_id, name_bn, name_en, branch_id, qualification, phone, photo_url, status, branches(name_bn, code, district)"
+      : "id, employee_id, name_bn, name_en, branch_id, designation, phone, photo_url, status, branches(name_bn, code, district)";
+  const { data } = await supabase
+    .from(table)
+    .select(selectCols)
+    .eq("user_id", userId)
+    .single();
+  if (!data) return null;
+  const b: any = (data as any).branches ?? {};
+  return {
+    id: data.id,
+    employee_id: data.employee_id,
+    name_bn: data.name_bn,
+    name_en: data.name_en,
+    designation: data.designation ?? data.qualification ?? null,
+    branch_id: data.branch_id,
+    qualification: data.qualification ?? null,
+    phone: data.phone ?? null,
+    photo_url: data.photo_url,
+    status: data.status,
+    branch_name: b.name_bn ?? null,
+    branch_code: b.code ?? null,
+    branch_district: b.district ?? null,
+  };
+}
+
+
 /** Returns the auth user + their profile row (or null). Server-only. */
 export async function getSessionProfile(): Promise<{
   user: { id: string; email?: string } | null;

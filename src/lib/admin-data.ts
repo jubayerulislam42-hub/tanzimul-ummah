@@ -81,3 +81,46 @@ export async function getScopedStaff(branchIds: string[], limit = 300) {
     staff: (staff as any[]) ?? [],
   };
 }
+
+export interface BranchOverviewRow {
+  id: string;
+  code: string;
+  name_bn: string | null;
+  district: string | null;
+  division: string | null;
+  students: number;
+  teachers: number;
+  staff: number;
+}
+
+// Returns per-branch student/teacher/staff counts for the given branch ids.
+export async function getBranchOverview(branchIds: string[]): Promise<BranchOverviewRow[]> {
+  if (branchIds.length === 0) return [];
+  const supabase = createClient();
+  const [{ data: branches }, { data: students }, { data: teachers }, { data: staff }] =
+    await Promise.all([
+      supabase
+        .from("branches")
+        .select("id, code, name_bn, district, division")
+        .in("id", branchIds)
+        .order("code"),
+      supabase.from("students").select("branch_id").in("branch_id", branchIds),
+      supabase.from("teachers").select("branch_id").in("branch_id", branchIds),
+      supabase.from("staff").select("branch_id").in("branch_id", branchIds),
+    ]);
+
+  const count = (rows: any[] | null, id: string) =>
+    (rows ?? []).filter((r) => r.branch_id === id).length;
+
+  return (branches as any[]).map((b) => ({
+    id: b.id,
+    code: b.code,
+    name_bn: b.name_bn,
+    district: b.district,
+    division: b.division,
+    students: count(students as any[], b.id),
+    teachers: count(teachers as any[], b.id),
+    staff: count(staff as any[], b.id),
+  }));
+}
+

@@ -1,9 +1,10 @@
 import { redirect } from "next/navigation";
-import { getSessionProfile, getMyStudentRecord } from "@/lib/auth";
+import { getSessionProfile, getMyStudentRecord, getMyStaffRecord } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import StudentProfileCard from "@/components/StudentProfileCard";
+import StaffProfileCard from "@/components/StaffProfileCard";
 import { GraduationCap, Users, BookOpenText, Bell, Building2, ShieldCheck, CalendarDays, Clock } from "lucide-react";
 
 const tilesByRole: Record<string, { icon: any; label: string; href: string }[]> = {
@@ -96,9 +97,13 @@ export default async function DashboardPage() {
 
   const tiles = tilesByRole[role] ?? tilesByRole.student;
 
-  // Load the student's own record to show a profile card.
+  // Load the signed-in user's own record to show a profile card.
   const studentRecord =
     role === "student" && user?.id ? await getMyStudentRecord(user.id) : null;
+  const staffRecord =
+    (role === "staff" || role === "teacher") && user?.id
+      ? await getMyStaffRecord(user.id, role === "teacher" ? "teachers" : "staff")
+      : null;
 
   return (
     <main className="min-h-screen bg-off-white">
@@ -109,6 +114,11 @@ export default async function DashboardPage() {
         {studentRecord && (
           <div className="mb-6">
             <StudentProfileCard record={studentRecord} />
+          </div>
+        )}
+        {staffRecord && (
+          <div className="mb-6">
+            <StaffProfileCard record={staffRecord} />
           </div>
         )}
 
@@ -127,9 +137,9 @@ export default async function DashboardPage() {
           ))}
         </div>
 
-        {role === "student" && (
+        {(role === "student" || role === "staff" || role === "teacher") && (
           <p className="mt-8 rounded-2xl bg-primary/5 px-4 py-6 text-center text-sm text-charcoal/50">
-            আপনার হিফয অগ্রগতি ও পরীক্ষার ফল শীঘ্রই যুক্ত করা হবে।
+            আপনার মডিউলগুলো শীঘ্রই যুক্ত করা হবে।
           </p>
         )}
       </div>
