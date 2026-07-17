@@ -27,7 +27,7 @@ export default function AdminBranchForm({ role }: { role: string }) {
     }
     const { error } = await supabase
       .from("user_profiles")
-      .update({ full_name: name || null, branch_id: branchId || null, status: "active" })
+      .update({ full_name: name || null, branch_id: branchId || null })
       .eq("id", user.id);
     if (error) {
       setMsg("ত্রুটি: " + error.message);

@@ -32,6 +32,24 @@ async function getStats() {
   return { branchCount: branchCount ?? 0, divisionCount };
 }
 
+interface MiniNotice {
+  id: string;
+  title: string;
+  description: string | null;
+  published_at: string | null;
+}
+
+async function getRecentNotices(): Promise<MiniNotice[]> {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("notices")
+    .select("id, title, description, published_at")
+    .eq("is_published", true)
+    .order("published_at", { ascending: false })
+    .limit(3);
+  return (data as MiniNotice[]) ?? [];
+}
+
 export default async function Home({
   searchParams,
 }: {
@@ -44,6 +62,7 @@ export default async function Home({
   }
 
   const { branchCount, divisionCount } = await getStats();
+  const recentNotices = await getRecentNotices();
   const quickLinks = [
     { icon: Building2, label: "শাখাসমূহ", href: "/branches", desc: "১২৫+ শাখা" },
     { icon: BookOpenText, label: "ভর্তি তথ্য", href: "/admission", desc: "আবেদন করুন" },
@@ -150,17 +169,38 @@ export default async function Home({
         </div>
       </section>
 
-      {/* NOTICES + EVENTS placeholder (data-driven later) */}
+      {/* NOTICES + EVENTS */}
       <section className="bg-off-white pb-16">
         <div className="mx-auto grid max-w-6xl gap-6 px-4 md:grid-cols-2">
           <div className="rounded-2xl border border-primary/10 bg-white p-6 shadow-sm">
-            <div className="mb-4 flex items-center gap-2 text-primary">
-              <Bell size={20} className="text-accent-gold" />
-              <h3 className="font-serif-bn text-lg font-bold">সর্বশেষ নোটিশ</h3>
+            <div className="mb-4 flex items-center justify-between">
+              <div className="flex items-center gap-2 text-primary">
+                <Bell size={20} className="text-accent-gold" />
+                <h3 className="font-serif-bn text-lg font-bold">সর্বশেষ নোটিশ</h3>
+              </div>
+              <Link href="/notices" className="text-xs text-accent-gold hover:underline">সব দেখুন</Link>
             </div>
-            <p className="rounded-lg bg-primary/5 px-4 py-6 text-center text-sm text-charcoal/50">
-              এখনও কোনো নোটিশ প্রকাশ করা হয়নি।
-            </p>
+            {recentNotices.length === 0 ? (
+              <p className="rounded-lg bg-primary/5 px-4 py-6 text-center text-sm text-charcoal/50">
+                এখনও কোনো নোটিশ প্রকাশ করা হয়নি।
+              </p>
+            ) : (
+              <ul className="space-y-3">
+                {recentNotices.map((n) => (
+                  <li key={n.id} className="border-b border-primary/5 pb-3 last:border-0 last:pb-0">
+                    <h4 className="font-medium text-charcoal">{n.title}</h4>
+                    {n.description && (
+                      <p className="mt-0.5 line-clamp-2 text-xs text-charcoal/60">{n.description}</p>
+                    )}
+                    {n.published_at && (
+                      <p className="mt-1 text-[11px] text-charcoal/40">
+                        {new Date(n.published_at).toLocaleDateString("bn-BD")}
+                      </p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
           <div className="rounded-2xl border border-primary/10 bg-white p-6 shadow-sm">
             <div className="mb-4 flex items-center gap-2 text-primary">
