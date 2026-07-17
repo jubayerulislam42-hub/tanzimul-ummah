@@ -74,7 +74,48 @@ export async function getMyExams(userId: string): Promise<ExamRow[]> {
   return (data as ExamRow[]) ?? [];
 }
 
-// Aggregate hifz progress for the dashboard summary.
+export interface AttendanceRow {
+  date: string;
+  status: "present" | "absent" | "late" | "excused";
+}
+
+export async function getMyAttendance(userId: string): Promise<AttendanceRow[]> {
+  const supabase = createClient();
+  const { data: stu } = await supabase
+    .from("students")
+    .select("id")
+    .eq("user_id", userId)
+    .single();
+  if (!stu) return [];
+  const { data } = await supabase
+    .from("attendance")
+    .select("date, status")
+    .eq("student_id", (stu as any).id)
+    .order("date", { ascending: false })
+    .limit(60);
+  return (data as AttendanceRow[]) ?? [];
+}
+
+export async function getAttendanceSummary(userId: string): Promise<{
+  present: number;
+  absent: number;
+  late: number;
+  total: number;
+  percent: number;
+}> {
+  const rows = await getMyAttendance(userId);
+  const present = rows.filter((r) => r.status === "present").length;
+  const absent = rows.filter((r) => r.status === "absent").length;
+  const late = rows.filter((r) => r.status === "late").length;
+  const total = rows.length;
+  return {
+    present,
+    absent,
+    late,
+    total,
+    percent: total ? Math.round(((present + late * 0.5) / total) * 100) : 0,
+  };
+}
 export async function getHifzSummary(userId: string): Promise<{
   memorized: number;
   in_progress: number;

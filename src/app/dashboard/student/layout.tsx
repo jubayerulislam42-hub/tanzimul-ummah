@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { GraduationCap, BookOpenText, ClipboardList } from "lucide-react";
+import { GraduationCap, BookOpenText, ClipboardList, CalendarDays } from "lucide-react";
 
 export default function StudentLayout({
   children,
@@ -12,6 +12,7 @@ export default function StudentLayout({
     { icon: GraduationCap, label: "ড্যাশবোর্ড", href: "/dashboard" },
     { icon: BookOpenText, label: "হিফয অগ্রগতি", href: "/dashboard/student/hifz" },
     { icon: ClipboardList, label: "পরীক্ষার ফল", href: "/dashboard/student/exams" },
+    { icon: CalendarDays, label: "আমার হাজিরা", href: "/dashboard/student/attendance" },
   ];
   return (
     <>

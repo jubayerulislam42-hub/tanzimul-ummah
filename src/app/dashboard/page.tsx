@@ -16,12 +16,12 @@ const tilesByRole: Record<string, { icon: any; label: string; href: string }[]> 
   staff: [
     { icon: Users, label: "শিক্ষার্থী ব্যবস্থাপনা", href: "/dashboard/teacher/students" },
     { icon: Bell, label: "নোটিশ", href: "/notices" },
-    { icon: CalendarDays, label: "হাজিরা", href: "/dashboard/attendance" },
+    { icon: CalendarDays, label: "হাজিরা", href: "/dashboard/admin/attendance" },
   ],
   teacher: [
     { icon: Users, label: "আমার শিক্ষার্থীরা", href: "/dashboard/teacher/students" },
     { icon: GraduationCap, label: "শিক্ষার্থী অগ্রগতি", href: "/dashboard/admin/hifz" },
-    { icon: CalendarDays, label: "হাজিরা", href: "/dashboard/attendance" },
+    { icon: CalendarDays, label: "হাজিরা", href: "/dashboard/admin/attendance" },
   ],
   principal: [
     { icon: ShieldCheck, label: "অ্যাডমিন প্যানেল", href: "/dashboard/admin" },
