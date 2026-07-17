@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import StudentProfileCard from "@/components/StudentProfileCard";
 import StaffProfileCard from "@/components/StaffProfileCard";
-import { GraduationCap, Users, BookOpenText, Bell, Building2, ShieldCheck, CalendarDays, Clock } from "lucide-react";
+import { GraduationCap, Users, BookOpenText, Bell, Building2, ShieldCheck, CalendarDays, Clock, ClipboardList } from "lucide-react";
 
 const tilesByRole: Record<string, { icon: any; label: string; href: string }[]> = {
   student: [
@@ -25,21 +25,21 @@ const tilesByRole: Record<string, { icon: any; label: string; href: string }[]> 
   ],
   principal: [
     { icon: ShieldCheck, label: "অ্যাডমিন প্যানেল", href: "/dashboard/admin" },
-    { icon: Building2, label: "শাখা ওভারভিউ", href: "#" },
-    { icon: Users, label: "শিক্ষক-কর্মচারী", href: "#" },
-    { icon: ShieldCheck, label: "অনুমোদন", href: "/dashboard/approvals" },
+    { icon: Building2, label: "শাখা ওভারভিউ", href: "/dashboard/admin" },
+    { icon: BookOpenText, label: "হিফয এন্ট্রি", href: "/dashboard/admin/hifz" },
+    { icon: ClipboardList, label: "পরীক্ষার ফল এন্ট্রি", href: "/dashboard/admin/exams" },
   ],
   regional_supervisor: [
     { icon: ShieldCheck, label: "অ্যাডমিন প্যানেল", href: "/dashboard/admin" },
     { icon: Building2, label: "আঞ্চলিক শাখাসমূহ", href: "/branches" },
-    { icon: Users, label: "প্রতিবেদন", href: "#" },
+    { icon: BookOpenText, label: "হিফয এন্ট্রি", href: "/dashboard/admin/hifz" },
     { icon: ShieldCheck, label: "অনুমোদন", href: "/dashboard/approvals" },
   ],
   super_admin: [
     { icon: ShieldCheck, label: "অ্যাডমিন প্যানেল", href: "/dashboard/admin" },
     { icon: ShieldCheck, label: "অনুমোদন", href: "/dashboard/approvals" },
     { icon: Building2, label: "সব শাখা", href: "/branches" },
-    { icon: Users, label: "ব্যবহারকারী ব্যবস্থাপনা", href: "#" },
+    { icon: Users, label: "ব্যবহারকারী ব্যবস্থাপনা", href: "/dashboard/admin/whitelist" },
   ],
 };
 

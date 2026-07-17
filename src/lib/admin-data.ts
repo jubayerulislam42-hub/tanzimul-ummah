@@ -51,15 +51,24 @@ export async function getScopedBranches(branchIds: string[]) {
   return (data as any[]) ?? [];
 }
 
-export async function getScopedStudents(branchIds: string[], limit = 200) {
+// Returns students within the given branch ids (for admin/teacher selection).
+export async function getScopedStudents(branchIds: string[]): Promise<
+  { id: string; name_bn: string | null; roll_id: string | null; branch_code: string | null }[]
+> {
+  if (branchIds.length === 0) return [];
   const supabase = createClient();
   const { data } = await supabase
     .from("students")
-    .select("id, roll_id, name_bn, name_en, class_id, branch_id, status")
+    .select("id, name_bn, roll_id, branches(code)")
     .in("branch_id", branchIds)
     .order("name_bn")
-    .limit(limit);
-  return (data as any[]) ?? [];
+    .limit(500);
+  return ((data as any[]) ?? []).map((s) => ({
+    id: s.id,
+    name_bn: s.name_bn,
+    roll_id: s.roll_id,
+    branch_code: s.branches?.code ?? null,
+  }));
 }
 
 export async function getScopedStaff(branchIds: string[], limit = 300) {
@@ -123,4 +132,3 @@ export async function getBranchOverview(branchIds: string[]): Promise<BranchOver
     staff: count(staff as any[], b.id),
   }));
 }
-
