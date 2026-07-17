@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 import { getSessionProfile } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import DashboardLayout from "@/app/dashboard/layout";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import ApprovalsList from "@/components/ApprovalsList";
 
 export const dynamic = "force-dynamic";
@@ -20,9 +21,13 @@ export default async function ApprovalsPage() {
   const items = (data as any[]) ?? [];
 
   return (
-    <DashboardLayout profile={profile!}>
-      <h2 className="mb-4 font-serif-bn text-lg font-bold text-primary">অনুমোদনের অপেক্ষায়</h2>
-      <ApprovalsList items={items} />
-    </DashboardLayout>
+    <main className="min-h-screen bg-off-white">
+      <Navbar />
+      <div className="mx-auto max-w-5xl px-4 py-10">
+        <h2 className="mb-4 font-serif-bn text-lg font-bold text-primary">অনুমোদনের অপেক্ষায়</h2>
+        <ApprovalsList items={items} />
+      </div>
+      <Footer />
+    </main>
   );
 }
