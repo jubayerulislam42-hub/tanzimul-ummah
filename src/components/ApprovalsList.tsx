@@ -19,6 +19,14 @@ const roleLabel: Record<string, string> = {
   student: "ছাত্র",
   teacher: "শিক্ষক",
   staff: "স্টাফ",
+  profile: "নিবন্ধন",
+};
+
+const kindLabel: Record<string, string> = {
+  student: "ছাত্র রেকর্ড",
+  teacher: "শিক্ষক রেকর্ড",
+  staff: "স্টাফ রেকর্ড",
+  profile: "অসম্পূর্ণ নিবন্ধন",
 };
 
 export default function ApprovalsList({ items }: { items: Pending[] }) {
@@ -57,7 +65,7 @@ export default function ApprovalsList({ items }: { items: Pending[] }) {
               {it.record_name || it.full_name || it.email}
             </div>
             <div className="mt-0.5 text-xs text-charcoal/60">
-              {roleLabel[it.role] ?? it.role} · {it.kind} · {it.email}
+              {roleLabel[it.role] ?? it.role} · {kindLabel[it.kind] ?? it.kind} · {it.email}
             </div>
           </div>
           {done.has(it.user_id) ? (
