@@ -1,6 +1,7 @@
 import AuthButton from "@/components/AuthButton";
 import SectionDivider from "@/components/SectionDivider";
 import Logo from "@/components/Logo";
+import { Suspense } from "react";
 
 export const metadata = { title: "লগইন — তানযীমুল উম্মাহ" };
 
@@ -30,7 +31,9 @@ export default function LoginPage({
           </p>
         )}
 
-        <AuthButton next="/dashboard" className="w-full justify-center" />
+        <Suspense fallback={<div className="h-12 w-full rounded-full bg-accent-gold/40" />}>
+          <AuthButton next="/dashboard" className="w-full justify-center" />
+        </Suspense>
 
         <p className="mt-6 text-xs text-cream/50">
           অনুমোদিত ব্যবহারকারীরা স্বয়ংক্রিয়ভাবে তাদের ড্যাশবোর্ডে প্রবেশ করবেন।
