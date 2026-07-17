@@ -1,8 +1,9 @@
 import { redirect } from "next/navigation";
-import { getSessionProfile } from "@/lib/auth";
+import { getSessionProfile, getMyStudentRecord } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import StudentProfileCard from "@/components/StudentProfileCard";
 import { GraduationCap, Users, BookOpenText, Bell, Building2, ShieldCheck, CalendarDays, Clock } from "lucide-react";
 
 const tilesByRole: Record<string, { icon: any; label: string; href: string }[]> = {
@@ -95,11 +96,22 @@ export default async function DashboardPage() {
 
   const tiles = tilesByRole[role] ?? tilesByRole.student;
 
+  // Load the student's own record to show a profile card.
+  const studentRecord =
+    role === "student" && user?.id ? await getMyStudentRecord(user.id) : null;
+
   return (
     <main className="min-h-screen bg-off-white">
       <Navbar />
       <div className="mx-auto max-w-5xl px-4 py-10">
         <h2 className="mb-4 font-serif-bn text-lg font-bold text-primary">দ্রুত কাজ</h2>
+
+        {studentRecord && (
+          <div className="mb-6">
+            <StudentProfileCard record={studentRecord} />
+          </div>
+        )}
+
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {tiles.map((t) => (
             <a
@@ -115,9 +127,11 @@ export default async function DashboardPage() {
           ))}
         </div>
 
-        <p className="mt-8 rounded-2xl bg-primary/5 px-4 py-6 text-center text-sm text-charcoal/50">
-          বিস্তারিত মডিউলগুলো পর্যায়ক্রমে যুক্ত করা হবে।
-        </p>
+        {role === "student" && (
+          <p className="mt-8 rounded-2xl bg-primary/5 px-4 py-6 text-center text-sm text-charcoal/50">
+            আপনার হিফয অগ্রগতি ও পরীক্ষার ফল শীঘ্রই যুক্ত করা হবে।
+          </p>
+        )}
       </div>
       <Footer />
     </main>

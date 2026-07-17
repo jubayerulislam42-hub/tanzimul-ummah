@@ -15,7 +15,46 @@ export interface Profile {
   photo_url: string | null;
   role: UserRole;
   branch_id: string | null;
-  status: "pending" | "active" | "suspended";
+  status: "pending" | "approved" | "rejected";
+}
+
+export interface StudentRecord {
+  id: string;
+  roll_id: string | null;
+  name_bn: string | null;
+  name_en: string | null;
+  branch_id: string | null;
+  guardian_phone: string | null;
+  photo_url: string | null;
+  status: string | null;
+  branch_name: string | null;
+  branch_code: string | null;
+  branch_district: string | null;
+}
+
+/** Returns the logged-in student's record (with branch info) or null. Server-only. */
+export async function getMyStudentRecord(userId: string): Promise<StudentRecord | null> {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("students")
+    .select("id, roll_id, name_bn, name_en, branch_id, guardian_phone, photo_url, status, branches(name_bn, code, district)")
+    .eq("user_id", userId)
+    .single();
+  if (!data) return null;
+  const b: any = (data as any).branches ?? {};
+  return {
+    id: data.id,
+    roll_id: data.roll_id,
+    name_bn: data.name_bn,
+    name_en: data.name_en,
+    branch_id: data.branch_id,
+    guardian_phone: data.guardian_phone,
+    photo_url: data.photo_url,
+    status: data.status,
+    branch_name: b.name_bn ?? null,
+    branch_code: b.code ?? null,
+    branch_district: b.district ?? null,
+  };
 }
 
 /** Returns the auth user + their profile row (or null). Server-only. */
