@@ -9,8 +9,8 @@ import { GraduationCap, Users, BookOpenText, Bell, Building2, ShieldCheck, Calen
 
 const tilesByRole: Record<string, { icon: any; label: string; href: string }[]> = {
   student: [
-    { icon: GraduationCap, label: "আমার হিফয অগ্রগতি", href: "#" },
-    { icon: BookOpenText, label: "পরীক্ষার ফল", href: "#" },
+    { icon: GraduationCap, label: "আমার হিফয অগ্রগতি", href: "/dashboard/student/hifz" },
+    { icon: BookOpenText, label: "পরীক্ষার ফল", href: "/dashboard/student/exams" },
     { icon: Bell, label: "নোটিশ", href: "/notices" },
   ],
   staff: [
