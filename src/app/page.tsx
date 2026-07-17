@@ -4,6 +4,7 @@ import SectionDivider from "@/components/SectionDivider";
 import MosqueSilhouette from "@/components/MosqueSilhouette";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import {
   GraduationCap,
   Building2,
@@ -31,9 +32,18 @@ async function getStats() {
   return { branchCount: branchCount ?? 0, divisionCount };
 }
 
-export default async function Home() {
-  const { branchCount, divisionCount } = await getStats();
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { code?: string };
+}) {
+  // OAuth safety net: if a provider redirects a code to the root (stale tab / fallback),
+  // forward it to the callback route so the session exchange still happens.
+  if (searchParams?.code) {
+    redirect(`/auth/callback?code=${encodeURIComponent(searchParams.code)}&next=${encodeURIComponent("/dashboard")}`);
+  }
 
+  const { branchCount, divisionCount } = await getStats();
   const quickLinks = [
     { icon: Building2, label: "শাখাসমূহ", href: "/branches", desc: "১২৫+ শাখা" },
     { icon: BookOpenText, label: "ভর্তি তথ্য", href: "/admission", desc: "আবেদন করুন" },

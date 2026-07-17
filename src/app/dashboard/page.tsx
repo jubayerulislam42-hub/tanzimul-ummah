@@ -60,9 +60,11 @@ export default async function DashboardPage() {
   const role = finalProfile?.role ?? "student";
   const isAdmin = role === "principal" || role === "regional_supervisor" || role === "super_admin";
 
-  // New users: admins pick branch via /onboarding/admin; others via /onboarding role select
-  if (finalProfile && (!role || !finalProfile.branch_id)) {
-    redirect(isAdmin ? "/onboarding/admin" : "/onboarding");
+  // New users: admins pick branch via /onboarding/admin; others via /onboarding role select.
+  // NOTE: super_admin intentionally has NO branch_id (governs all branches) and must NOT be
+  // bounced to onboarding forever. Only non-admins require a branch to proceed.
+  if (finalProfile && !isAdmin && !finalProfile.branch_id) {
+    redirect("/onboarding");
   }
 
   const tiles = tilesByRole[role] ?? tilesByRole.student;
