@@ -39,6 +39,9 @@ export async function getMyScope() {
       .select("id")
       .eq("status", "active");
     branchIds = (branches ?? []).map((b: any) => b.id);
+  } else if ((profile.role === "teacher" || profile.role === "staff") && profile.branch_id) {
+    // Teacher/staff are scoped to their own branch.
+    branchIds = [profile.branch_id];
   }
 
   return { profile, branchIds };

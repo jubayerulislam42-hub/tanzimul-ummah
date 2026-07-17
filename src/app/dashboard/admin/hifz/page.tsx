@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getSessionProfile } from "@/lib/auth";
-import { requireScope, getScopedStudents } from "@/lib/admin-data";
+import { getMyScope } from "@/lib/scope";
+import { getScopedStudents } from "@/lib/admin-data";
 import HifzEntryForm from "@/components/HifzEntryForm";
 import AdminShell from "@/components/AdminShell";
 import { BookOpenText } from "lucide-react";
@@ -10,16 +11,12 @@ export const dynamic = "force-dynamic";
 export default async function AdminHifzPage() {
   const { user, profile } = await getSessionProfile();
   if (!user) redirect("/login");
-  if (!["principal", "regional_supervisor", "super_admin"].includes(profile?.role ?? "")) {
+  if (!["principal", "regional_supervisor", "super_admin", "teacher"].includes(profile?.role ?? "")) {
     redirect("/dashboard");
   }
-  let scope;
-  try {
-    scope = await requireScope();
-  } catch {
-    redirect("/dashboard");
-  }
-  const students = await getScopedStudents(scope.branchIds);
+  const scope = await getMyScope();
+  const branchIds = scope?.branchIds ?? [];
+  const students = await getScopedStudents(branchIds);
 
   return (
     <AdminShell profile={profile!}>
@@ -35,4 +32,5 @@ export default async function AdminHifzPage() {
       </div>
     </AdminShell>
   );
+}
 }
