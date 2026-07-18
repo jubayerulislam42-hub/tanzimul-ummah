@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import SectionDivider from "@/components/SectionDivider";
 import { createClient } from "@/lib/supabase/server";
 import { BookOpenText, Target, Heart, Users } from "lucide-react";
+import { CrescentMoon } from "@/components/IslamicArt";
 
 export const revalidate = 300;
 export const metadata = { title: "পরিচিতি — তানযীমুল উম্মাহ হিফয মাদরাসা" };
@@ -31,9 +32,11 @@ export default async function AboutPage() {
       <Navbar />
 
       {/* Header */}
-      <section className="bg-primary islamic-pattern">
-        <div className="mx-auto max-w-4xl px-4 py-14 text-center">
-          <h1 className="font-serif-bn text-3xl font-bold text-cream md:text-4xl">
+      <section className="hero-bg relative" style={{ backgroundImage: "url('/hero-makkah.jpg')" }}>
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/70 to-primary" />
+        <div className="relative mx-auto max-w-4xl px-4 py-16 text-center">
+          <CrescentMoon className="animate-floaty mx-auto mb-4 h-12 w-12 text-accent-gold/80" />
+          <h1 className="font-serif-bn text-3xl font-bold text-cream md:text-4xl drop-shadow-lg">
             আমাদের পরিচিতি
           </h1>
           <SectionDivider className="my-4" />

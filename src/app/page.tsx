@@ -2,6 +2,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SectionDivider from "@/components/SectionDivider";
 import MosqueSilhouette from "@/components/MosqueSilhouette";
+import Reveal from "@/components/Reveal";
+import { CrescentMoon, Lantern, OrnateDivider } from "@/components/IslamicArt";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -82,35 +84,54 @@ export default async function Home({
       <Navbar />
 
       {/* HERO */}
-      <section className="relative overflow-hidden bg-primary islamic-pattern">
-        <div className="mx-auto flex max-w-5xl flex-col items-center px-4 py-20 text-center md:py-28">
-          <span className="mb-4 rounded-full border border-accent-gold/30 bg-accent-gold/10 px-4 py-1.5 text-xs font-medium text-accent-gold">
-            بسم الله الرحمن الرحيم
-          </span>
-          <h1 className="font-serif-bn text-3xl font-bold leading-tight text-cream md:text-5xl">
-            ইলমের আলো ছড়াক
-            <span className="block text-accent-gold">প্রতিটি হৃদয়ে</span>
-          </h1>
-          <p className="mt-5 max-w-2xl text-sm leading-relaxed text-cream/75 md:text-base">
-            কুরআনের হিফয ও আধুনিক শিক্ষার সমন্বয়ে দেশব্যাপী {branchCount}+ শাখায়
-            পরিচালিত একটি আদর্শ দ্বীনি শিক্ষা প্রতিষ্ঠান।
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link
-              href="/branches"
-              className="rounded-full bg-accent-gold px-6 py-3 font-semibold text-primary shadow-gold transition hover:brightness-110"
-            >
-              শাখা খুঁজুন
-            </Link>
-            <Link
-              href="/about"
-              className="rounded-full border border-cream/25 px-6 py-3 font-semibold text-cream transition hover:border-accent-gold hover:text-accent-gold"
-            >
-              আমাদের সম্পর্কে
-            </Link>
-          </div>
+      <section
+        className="relative overflow-hidden hero-bg"
+        style={{ backgroundImage: "url('/hero-makkah.jpg')" }}
+      >
+        {/* dark green overlay for legibility + theme */}
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/75 to-primary" />
+        <div className="absolute inset-0 islamic-pattern opacity-40" />
+
+        {/* floating decorative accents */}
+        <CrescentMoon className="animate-floaty absolute right-6 top-8 h-14 w-14 text-accent-gold/80 md:h-20 md:w-20" />
+        <Lantern className="animate-floaty absolute left-4 top-10 h-24 w-14 text-accent-gold/70 md:h-32 md:w-20" />
+
+        <div className="relative mx-auto flex max-w-5xl flex-col items-center px-4 py-24 text-center md:py-32">
+          <Reveal>
+            <span className="mb-5 inline-block rounded-full border border-accent-gold/40 bg-accent-gold/10 px-5 py-1.5 text-xs font-medium tracking-wide text-accent-gold backdrop-blur-sm">
+              بسم الله الرحمن الرحيم
+            </span>
+          </Reveal>
+          <Reveal delay={100}>
+            <h1 className="font-serif-bn text-4xl font-bold leading-tight text-cream drop-shadow-lg md:text-6xl">
+              ইলমের আলো ছড়াক
+              <span className="block text-gold-gradient">প্রতিটি হৃদয়ে</span>
+            </h1>
+          </Reveal>
+          <Reveal delay={200}>
+            <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-cream/85 md:text-lg">
+              কুরআনের হিফয ও আধুনিক শিক্ষার সমন্বয়ে দেশব্যাপী {branchCount}+ শাখায়
+              পরিচালিত একটি আদর্শ দ্বীনি শিক্ষা প্রতিষ্ঠান।
+            </p>
+          </Reveal>
+          <Reveal delay={300}>
+            <div className="mt-9 flex flex-wrap justify-center gap-3">
+              <Link
+                href="/branches"
+                className="rounded-full bg-accent-gold px-7 py-3.5 font-semibold text-primary shadow-gold transition hover:brightness-110"
+              >
+                শাখা খুঁজুন
+              </Link>
+              <Link
+                href="/about"
+                className="rounded-full border border-cream/30 bg-white/10 px-7 py-3.5 font-semibold text-cream backdrop-blur-sm transition hover:border-accent-gold hover:text-accent-gold"
+              >
+                আমাদের সম্পর্কে
+              </Link>
+            </div>
+          </Reveal>
         </div>
-        <MosqueSilhouette className="h-14 w-full text-off-white md:h-20" />
+        <MosqueSilhouette className="relative h-14 w-full text-off-white/90 md:h-20" />
       </section>
 
       {/* QUICK LINKS */}
@@ -137,36 +158,41 @@ export default async function Home({
       {/* STATS */}
       <section className="bg-primary-light py-14">
         <div className="mx-auto max-w-5xl px-4">
-          <h2 className="text-center font-serif-bn text-2xl font-bold text-cream">
-            এক নজরে তানযীমুল উম্মাহ
-          </h2>
-          <SectionDivider className="mb-8 mt-3" />
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            {stats.map((s) => (
-              <div
-                key={s.label}
-                className="rounded-2xl border border-accent-gold/15 bg-primary p-6 text-center"
-              >
-                <s.icon className="mx-auto mb-2 text-accent-gold" size={26} />
-                <div className="font-serif-bn text-2xl font-bold text-cream">{s.value}</div>
-                <div className="mt-1 text-xs text-cream/60">{s.label}</div>
-              </div>
-            ))}
-          </div>
+          <Reveal>
+            <h2 className="text-center font-serif-bn text-2xl font-bold text-cream">
+              এক নজরে তানযীমুল উম্মাহ
+            </h2>
+            <SectionDivider className="mb-8 mt-3" />
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+              {stats.map((s) => (
+                <div
+                  key={s.label}
+                  className="rounded-2xl border border-accent-gold/15 bg-primary p-6 text-center shadow-sm transition hover:-translate-y-1 hover:border-accent-gold"
+                >
+                  <s.icon className="mx-auto mb-2 text-accent-gold" size={26} />
+                  <div className="font-serif-bn text-2xl font-bold text-cream">{s.value}</div>
+                  <div className="mt-1 text-xs text-cream/60">{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </section>
 
       {/* QURANIC QUOTE */}
       <section className="bg-off-white py-16">
-        <div className="mx-auto max-w-3xl px-4 text-center">
-          <p className="font-serif text-2xl leading-loose text-primary md:text-3xl" dir="rtl">
-            اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ
-          </p>
-          <p className="mt-4 font-serif-bn text-base text-charcoal/70">
-            “পড়ো তোমার রবের নামে, যিনি সৃষ্টি করেছেন।”
-          </p>
-          <p className="mt-2 text-xs text-accent-gold">— সূরা আল-আলাক, আয়াত ১</p>
-        </div>
+        <Reveal>
+          <div className="mx-auto max-w-3xl px-4 text-center">
+            <p className="font-serif text-2xl leading-loose text-primary md:text-3xl" dir="rtl">
+              اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ
+            </p>
+            <p className="mt-4 font-serif-bn text-base text-charcoal/70">
+              “পড়ো তোমার রবের নামে, যিনি সৃষ্টি করেছেন।”
+            </p>
+            <p className="mt-2 text-xs text-accent-gold">— সূরা আল-আলাক, আয়াত ১</p>
+            <OrnateDivider className="mx-auto mt-6 h-5 w-40 text-accent-gold" />
+          </div>
+        </Reveal>
       </section>
 
       {/* NOTICES + EVENTS */}

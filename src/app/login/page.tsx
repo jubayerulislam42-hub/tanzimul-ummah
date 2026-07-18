@@ -11,8 +11,9 @@ export default function LoginPage({
   searchParams: { error?: string };
 }) {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-primary px-4 py-16 islamic-pattern">
-      <div className="w-full max-w-md rounded-3xl border border-accent-gold/20 bg-primary-light p-8 text-center shadow-2xl">
+    <main className="hero-bg relative flex min-h-screen items-center justify-center bg-primary px-4 py-16 islamic-pattern" style={{ backgroundImage: "url('/hero-makkah.jpg')" }}>
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/70 to-primary" />
+      <div className="relative z-10 w-full max-w-md rounded-3xl border border-accent-gold/20 bg-primary-light p-8 text-center shadow-2xl">
         <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-accent-gold/10 ring-1 ring-accent-gold/25">
           <Logo size={64} />
         </div>
