@@ -26,11 +26,20 @@ export default function Navbar() {
     supabase.auth.getSession().then(({ data }) => {
       setLoggedIn(!!data.session);
       setLoading(false);
+    }).catch(() => {
+      setLoggedIn(false);
+      setLoading(false);
     });
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      setLoggedIn(!!session);
-    });
-    return () => sub.subscription.unsubscribe();
+    let sub: { subscription: { unsubscribe: () => void } } | null = null;
+    try {
+      const { data } = supabase.auth.onAuthStateChange((_e, session) => {
+        setLoggedIn(!!session);
+      });
+      sub = data;
+    } catch {
+      /* ignore */
+    }
+    return () => sub?.subscription.unsubscribe();
   }, []);
 
   const logout = async () => {

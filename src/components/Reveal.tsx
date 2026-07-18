@@ -17,6 +17,11 @@ export default function Reveal({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // Fallback for environments without IntersectionObserver.
+    if (typeof IntersectionObserver === "undefined") {
+      setShown(true);
+      return;
+    }
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
