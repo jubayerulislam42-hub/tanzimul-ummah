@@ -1,17 +1,47 @@
 "use client";
 
-import { ReactNode } from "react";
+import { useEffect, useRef, useState, ReactNode } from "react";
 
-// Temporary passthrough to isolate a client-side exception on the home page.
-// Renders children directly with no hooks/observers so we can confirm whether
-// the Reveal animation wrapper was the cause.
 export default function Reveal({
   children,
+  delay = 0,
   className = "",
 }: {
   children: ReactNode;
   delay?: number;
   className?: string;
 }) {
-  return <div className={className}>{children}</div>;
+  const ref = useRef<HTMLDivElement>(null);
+  const [shown, setShown] = useState(true);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === "undefined") return;
+    setShown(false);
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShown(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.12 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      style={{ transitionDelay: `${delay}ms` }}
+      className={`transition-all duration-700 ease-out ${
+        shown ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+      } ${className}`}
+    >
+      {children}
+    </div>
+  );
 }
