@@ -41,6 +41,7 @@ export async function updateSession(request: NextRequest) {
   if (!user && path.startsWith("/dashboard")) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
+    url.search = ""; // strip any stale ?error=/?code= params from previous attempts
     return NextResponse.redirect(url);
   }
 
