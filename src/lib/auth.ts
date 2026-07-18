@@ -90,17 +90,18 @@ export async function getMyStaffRecord(
     .single();
   if (!data) return null;
   const b: any = (data as any).branches ?? {};
+  const d = data as any;
   return {
-    id: data.id,
-    employee_id: data.employee_id,
-    name_bn: data.name_bn,
-    name_en: data.name_en,
-    designation: data.designation ?? data.qualification ?? null,
-    branch_id: data.branch_id,
-    qualification: data.qualification ?? null,
-    phone: data.phone ?? null,
-    photo_url: data.photo_url,
-    status: data.status,
+    id: d.id,
+    employee_id: d.employee_id,
+    name_bn: d.name_bn,
+    name_en: d.name_en,
+    designation: d.designation ?? d.qualification ?? null,
+    branch_id: d.branch_id,
+    qualification: d.qualification ?? null,
+    phone: d.phone ?? null,
+    photo_url: d.photo_url,
+    status: d.status,
     branch_name: b.name_bn ?? null,
     branch_code: b.code ?? null,
     branch_district: b.district ?? null,
