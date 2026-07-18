@@ -53,13 +53,17 @@ export async function GET(request: NextRequest) {
       return response;
     }
 
-    // "state already used" / expired can happen if the callback URL is hit twice.
-    // If a session already exists, just proceed to next.
+    // OAuth exchange failed (e.g. bad_oauth_state, state expired, code reused).
+    // Be resilient: if a session already exists, send them to the dashboard.
+    // Otherwise send to login WITHOUT leaking the raw error to the URL.
     const {
       data: { user: existing },
     } = await supabase.auth.getUser();
-    if (existing) return response;
+    if (existing) {
+      return NextResponse.redirect(`${origin}/dashboard`);
+    }
+    return NextResponse.redirect(`${origin}/login`);
   }
 
-  return NextResponse.redirect(`${origin}/login?error=auth_failed`);
+  return NextResponse.redirect(`${origin}/login`);
 }

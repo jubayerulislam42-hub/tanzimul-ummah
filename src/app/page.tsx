@@ -57,11 +57,9 @@ export default async function Home({
 }: {
   searchParams: { code?: string };
 }) {
-  // OAuth safety net: if a provider redirects a code to the root (stale tab / fallback),
-  // forward it to the callback route so the session exchange still happens.
-  if (searchParams?.code) {
-    redirect(`/auth/callback?code=${encodeURIComponent(searchParams.code)}&next=${encodeURIComponent("/dashboard")}`);
-  }
+  // NOTE: We intentionally do NOT forward a stray ?code= here. The OAuth provider
+  // redirects to the exact redirectTo (${origin}/auth/callback), which handles the
+  // code exchange. Forwarding stale codes from the root caused bad_oauth_state.
 
   const { branchCount, divisionCount } = await getStats();
   const recentNotices = await getRecentNotices();
