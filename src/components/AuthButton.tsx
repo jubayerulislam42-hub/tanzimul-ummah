@@ -18,23 +18,9 @@ export default function AuthButton({
   // handles the exchange.
 
   const signIn = async () => {
-    // Clear any stale Supabase auth cookies so each OAuth attempt is a fresh PKCE flow.
-    // Prevents "state already used / bad_oauth_state" when switching between
-    // desktop and mobile view (which share the same browser storage).
-    const cookies = document.cookie.split(";");
-    for (const c of cookies) {
-      const name = c.split("=")[0].trim();
-      if (
-        name.startsWith("sb-") ||
-        name.startsWith("supabase") ||
-        name === "next_url"
-      ) {
-        document.cookie = `${name}=; path=/; max-age=0; samesite=lax`;
-        document.cookie = `${name}=; path=/; max-age=0; samesite=lax; domain=${window.location.hostname}`;
-      }
-    }
-
     const supabase = createClient();
+    // Pass `next` via a cookie so redirectTo is a clean path that matches the
+    // Supabase uri_allow_list exactly.
     document.cookie = `next_url=${encodeURIComponent(next)}; path=/; max-age=600; samesite=lax`;
     await supabase.auth.signInWithOAuth({
       provider: "google",
