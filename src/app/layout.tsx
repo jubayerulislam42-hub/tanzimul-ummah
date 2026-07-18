@@ -12,6 +12,13 @@ export const metadata: Metadata = {
   description: "ইলমের আলো ছড়াক প্রতিটি হৃদয়ে — তানযীমুল উম্মাহ হিফয মাদরাসার অফিসিয়াল ওয়েবসাইট।",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#0A1F16",
+};
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="bn" className={`${inter.variable} ${cormorant.variable} ${hindSiliguri.variable} ${notoSerifBengali.variable}`}>

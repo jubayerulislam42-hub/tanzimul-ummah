@@ -100,8 +100,8 @@ export default async function Home({
               بسم الله الرحمن الرحيم
             </span>
           </Reveal>
-          <Reveal delay={100}>
-            <h1 className="font-serif-bn text-4xl font-bold leading-tight text-cream drop-shadow-lg md:text-6xl">
+          <Reveal>
+            <h1 className="font-serif-bn text-3xl font-bold leading-tight text-cream drop-shadow-lg sm:text-4xl md:text-6xl">
               ইলমের আলো ছড়াক
               <span className="block text-gold-gradient">প্রতিটি হৃদয়ে</span>
             </h1>

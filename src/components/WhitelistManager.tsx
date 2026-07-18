@@ -99,6 +99,7 @@ export default function WhitelistManager() {
           তালিকা রিফ্রেশ করুন
         </button>
         {rows.length > 0 && (
+          <div className="overflow-x-auto">
           <table className="mt-3 w-full text-left text-sm">
             <thead className="text-charcoal/60"><tr><th className="py-2">ইমেইল</th><th>রোল</th><th>শাখা</th></tr></thead>
             <tbody>
@@ -111,6 +112,7 @@ export default function WhitelistManager() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>

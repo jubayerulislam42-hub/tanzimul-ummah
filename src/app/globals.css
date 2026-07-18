@@ -18,6 +18,7 @@ html {
 body {
   color: var(--foreground);
   background: var(--background);
+  overflow-x: hidden; /* prevent accidental horizontal scroll on mobile */
 }
 
 /* Islamic geometric pattern overlay (subtle, dark sections) */
