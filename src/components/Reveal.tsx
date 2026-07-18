@@ -12,16 +12,15 @@ export default function Reveal({
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [shown, setShown] = useState(false);
+  // Initial state visible to avoid hydration mismatch; enhance with animation on client.
+  const [shown, setShown] = useState(true);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    // Fallback for environments without IntersectionObserver.
-    if (typeof IntersectionObserver === "undefined") {
-      setShown(true);
-      return;
-    }
+    if (typeof IntersectionObserver === "undefined") return;
+    // Start hidden only after mount on client to enable the fade-in.
+    setShown(false);
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -33,6 +32,7 @@ export default function Reveal({
     );
     obs.observe(el);
     return () => obs.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
