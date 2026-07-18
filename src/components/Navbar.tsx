@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Menu, X, LogIn, LogOut } from "lucide-react";
+import { Menu, X, LogIn, LogOut, GraduationCap } from "lucide-react";
 import Logo from "./Logo";
 import { createClient } from "@/lib/supabase/client";
 
@@ -53,12 +53,20 @@ export default function Navbar() {
   const AuthControl = (
     <>
       {loggedIn ? (
-        <button
-          onClick={logout}
-          className="inline-flex items-center gap-1.5 rounded-full bg-accent-gold px-4 py-2 text-sm font-semibold text-primary transition hover:brightness-110"
-        >
-          <LogOut size={16} /> লগআউট
-        </button>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center gap-1.5 rounded-full border border-accent-gold/40 px-4 py-2 text-sm font-semibold text-accent-gold transition hover:bg-accent-gold/10"
+          >
+            <GraduationCap size={16} /> ড্যাশবোর্ড
+          </Link>
+          <button
+            onClick={logout}
+            className="inline-flex items-center gap-1.5 rounded-full bg-accent-gold px-4 py-2 text-sm font-semibold text-primary transition hover:brightness-110"
+          >
+            <LogOut size={16} /> লগআউট
+          </button>
+        </div>
       ) : (
         <Link
           href="/login"

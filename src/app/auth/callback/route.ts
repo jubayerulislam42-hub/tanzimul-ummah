@@ -16,12 +16,13 @@ export async function GET(request: NextRequest) {
 
   if (code) {
     const response = NextResponse.redirect(`${origin}${next}`);
+    const isHttps = origin.startsWith("https");
 
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
-        cookieOptions: { secure: false, sameSite: "lax" },
+        cookieOptions: { secure: isHttps, sameSite: "lax" },
         cookies: {
           getAll() {
             return request.cookies.getAll();
